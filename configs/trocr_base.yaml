@@ -1,0 +1,36 @@
+# TrOCR fine-tuning configuration
+# Model
+model_name: "microsoft/trocr-base-handwritten"
+max_target_length: 128
+
+# Data
+dataset_name: "gymprathap/Handwriting-Recognition-Dataset"
+train_split: 0.8
+val_split: 0.1
+test_split: 0.1
+subset_size: 5000        # start small for iteration; set to null for full dataset
+seed: 42
+
+# Training
+output_dir: "./weights"
+per_device_train_batch_size: 4
+per_device_eval_batch_size: 4
+gradient_accumulation_steps: 4   # effective batch size = 16
+learning_rate: 5.0e-5
+num_train_epochs: 10
+warmup_steps: 500
+weight_decay: 0.01
+fp16: true
+
+# Logging / checkpointing
+logging_steps: 100
+eval_steps: 500
+save_steps: 500
+save_total_limit: 3
+load_best_model_at_end: true
+metric_for_best_model: "cer"
+greater_is_better: false
+predict_with_generate: true
+
+# Early stopping
+early_stopping_patience: 3

@@ -1,0 +1,31 @@
+# Donut fine-tuning configuration (alternative path — see README for when to use this)
+model_name: "naver-clova-ix/donut-base"
+max_target_length: 512
+
+dataset_name: "nielsr/funsd"
+train_split: 0.8
+val_split: 0.1
+test_split: 0.1
+subset_size: null
+seed: 42
+
+output_dir: "./weights_donut"
+per_device_train_batch_size: 2
+per_device_eval_batch_size: 2
+gradient_accumulation_steps: 8   # effective batch size = 16
+learning_rate: 3.0e-5
+num_train_epochs: 10
+warmup_steps: 300
+weight_decay: 0.01
+fp16: true
+
+logging_steps: 50
+eval_steps: 300
+save_steps: 300
+save_total_limit: 3
+load_best_model_at_end: true
+metric_for_best_model: "cer"
+greater_is_better: false
+predict_with_generate: true
+
+early_stopping_patience: 3
