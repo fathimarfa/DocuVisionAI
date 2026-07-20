@@ -4,7 +4,7 @@ model_name: "microsoft/trocr-base-handwritten"
 max_target_length: 128
 
 # Data
-dataset_name: "gymprathap/Handwriting-Recognition-Dataset"
+dataset_name: "Teklia/IAM-line"
 train_split: 0.8
 val_split: 0.1
 test_split: 0.1

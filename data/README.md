@@ -1,16 +1,15 @@
 # Dataset Documentation
 
 ## Source
-**Handwriting Recognition Dataset** (Hugging Face): `gymprathap/Handwriting-Recognition-Dataset`
-https://huggingface.co/datasets/gymprathap/Handwriting-Recognition-Dataset
+**IAM Handwriting Database** (clean HF port): `Teklia/IAM-line`
+https://huggingface.co/datasets/Teklia/IAM-line
 
-- 400,000+ clean samples of handwritten names
-- Pre-split, no manual cleanup required
-- Free, no account/registration needed
+- The IAM dataset is one of the assignment's own recommended sources; this is a properly structured Hugging Face port of it (pre-split train/validation/test, ready-to-use `image`/`text` fields).
+- Line-level handwritten text images from 657 writers.
 
 ## Why this dataset
-- **TrOCR-base-handwritten** was pre-trained on similar handwriting distributions, so fine-tuning converges fast.
-- No manual annotation parsing (unlike IAM's XML forms) — lower risk of preprocessing bugs eating into project time.
+- **TrOCR-base-handwritten** was originally fine-tuned on IAM itself, so further fine-tuning on more IAM-style data converges reliably.
+- Predefined train/validation/test splits — no manual annotation parsing, no re-splitting logic needed.
 - Large enough to subsample for fast iteration (`subset_size` in config) and scale up later.
 
 ## Alternative datasets (documented, not used by default)
