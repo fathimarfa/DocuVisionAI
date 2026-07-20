@@ -1,1 +1,2 @@
 gradio>=4.8.0
+huggingface_hub>=0.19.4,<0.20
