@@ -12,7 +12,7 @@ subset_size: 500       # start small for iteration; set to null for full dataset
 seed: 42
 
 # Training
-output_dir: "./weights"
+output_dir: "/content/drive/MyDrive/DocuVisionAI/weights"
 per_device_train_batch_size: 4
 per_device_eval_batch_size: 4
 gradient_accumulation_steps: 4   # effective batch size = 16
