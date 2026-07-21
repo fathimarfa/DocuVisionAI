@@ -155,7 +155,7 @@ def run_evaluation(checkpoint_path: str, base_model_name: str, test_csv: str, de
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--checkpoint", type=str, default="weights/checkpoint-best")
+    parser.add_argument("--checkpoint", type=str, default="weights/checkpoint-final")
     parser.add_argument("--base-model", type=str, default="microsoft/trocr-base-handwritten")
     parser.add_argument("--test-csv", type=str, default="data/processed/test.csv")
     parser.add_argument("--device", type=str, default="cuda" if torch.cuda.is_available() else "cpu")

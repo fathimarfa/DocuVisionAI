@@ -96,7 +96,7 @@ def train(cfg: dict) -> None:
 
     trainer = Seq2SeqTrainer(
         model=model,
-        tokenizer=processor.feature_extractor,
+        processing_class=processor,
         args=training_args,
         train_dataset=train_dataset,
         eval_dataset=val_dataset,

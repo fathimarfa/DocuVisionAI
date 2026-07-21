@@ -79,7 +79,7 @@ def load_model(checkpoint_path: str, device: str = None) -> OCRPredictor:
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--checkpoint", type=str, default="weights/checkpoint-best")
+    parser.add_argument("--checkpoint", type=str, default="weights/checkpoint-final")
     parser.add_argument("--image", type=str, required=True, help="Path to an image file")
     args = parser.parse_args()
 
