@@ -8,7 +8,7 @@ dataset_name: "Teklia/IAM-line"
 train_split: 0.8
 val_split: 0.1
 test_split: 0.1
-subset_size: 500       # start small for iteration; set to null for full dataset
+subset_size: null       # start small for iteration; set to null for full dataset
 seed: 42
 
 # Training
@@ -17,15 +17,15 @@ per_device_train_batch_size: 4
 per_device_eval_batch_size: 4
 gradient_accumulation_steps: 4   # effective batch size = 16
 learning_rate: 5.0e-5
-num_train_epochs: 3
+num_train_epochs: 10
 warmup_steps: 500
 weight_decay: 0.01
 fp16: true
 
 # Logging / checkpointing
-logging_steps: 10
-eval_steps: 20
-save_steps: 20
+logging_steps: 100
+eval_steps: 500
+save_steps: 500
 save_total_limit: 3
 load_best_model_at_end: true
 metric_for_best_model: "cer"

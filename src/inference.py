@@ -5,7 +5,7 @@ Production inference pipeline: load the fine-tuned checkpoint once, then
 transcribe new images (single or batched) in under ~2 seconds each on CPU.
 
 Usage:
-    python src/inference.py --checkpoint weights/checkpoint-best --image path/to/image.png
+    python src/inference.py --checkpoint weights/checkpoint-final --image path/to/image.png
 """
 import argparse
 import logging

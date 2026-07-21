@@ -6,7 +6,7 @@ fine-tuned model against the base (zero-shot) model, and prints a formatted
 evaluation report matching the assignment's expected output format.
 
 Usage:
-    python src/evaluate.py --checkpoint weights/checkpoint-best --base-model microsoft/trocr-base-handwritten
+    python src/evaluate.py --checkpoint weights/checkpoint-final --base-model microsoft/trocr-base-handwritten
 """
 import argparse
 import logging
