@@ -84,7 +84,7 @@ def setup_training(cfg: dict) -> Seq2SeqTrainingArguments:
 def train(cfg: dict) -> None:
     set_seed(cfg["seed"])
 
-    processor = TrOCRProcessor.from_pretrained(cfg["model_name"], use_fast=False)
+    processor = TrOCRProcessor.from_pretrained(cfg["model_name"])
     model = load_model(cfg["model_name"])
     model = configure_model_for_training(model, processor, cfg)
 

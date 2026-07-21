@@ -26,7 +26,7 @@ class OCRPredictor:
     def __init__(self, checkpoint_path: str, device: str = None):
         self.device = device or ("cuda" if torch.cuda.is_available() else "cpu")
         logger.info("Loading model from %s onto %s", checkpoint_path, self.device)
-        self.processor = TrOCRProcessor.from_pretrained(checkpoint_path, use_fast=False)
+        self.processor = TrOCRProcessor.from_pretrained(checkpoint_path)
         self.model = VisionEncoderDecoderModel.from_pretrained(checkpoint_path).to(self.device)
         self.model.eval()
 

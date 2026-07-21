@@ -133,7 +133,7 @@ def print_evaluation_report(base_metrics: Dict, ft_metrics: Dict, refs: List[str
 
 
 def run_evaluation(checkpoint_path: str, base_model_name: str, test_csv: str, device: str) -> None:
-    processor = TrOCRProcessor.from_pretrained(checkpoint_path, use_fast=False)
+    processor = TrOCRProcessor.from_pretrained(checkpoint_path)
     test_dataset = OCRDataset(test_csv, processor)
 
     logger.info("Evaluating base (zero-shot) model...")
