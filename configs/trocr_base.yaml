@@ -1,5 +1,5 @@
 # TrOCR fine-tuning configuration
-resume_from_checkpoint: "/kaggle/input/datasets/fathimaarfa/docuvision-checkpoint-4000/content/drive/MyDrive/DocuVisionAI/weights/checkpoint-4000/trainer_state.json"
+resume_from_checkpoint: "/kaggle/input/datasets/fathimaarfa/docuvision-checkpoint-4000/content/drive/MyDrive/DocuVisionAI/weights/checkpoint-4000"
 # Model
 model_name: "microsoft/trocr-base-handwritten"
 max_target_length: 128
