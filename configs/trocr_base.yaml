@@ -1,5 +1,5 @@
 # TrOCR fine-tuning configuration
-resume_from_checkpoint: "/content/drive/MyDrive/DocuVisionAI/weights/checkpoint-2500"
+resume_from_checkpoint: "/kaggle/input/datasets/fathimaarfa/docuvision-checkpoint-4000/content/drive/MyDrive/DocuVisionAI/weights/checkpoint-4000/trainer_state.json"
 # Model
 model_name: "microsoft/trocr-base-handwritten"
 max_target_length: 128
@@ -13,7 +13,7 @@ subset_size: null       # start small for iteration; set to null for full datase
 seed: 42
 
 # Training
-output_dir: "/content/drive/MyDrive/DocuVisionAI/weights"
+output_dir: "/kaggle/working/weights"
 per_device_train_batch_size: 4
 per_device_eval_batch_size: 4
 gradient_accumulation_steps: 4   # effective batch size = 16
