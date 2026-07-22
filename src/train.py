@@ -16,7 +16,9 @@ import numpy as np
 import torch
 import yaml
 
-torch.serialization.add_safe_globals([np.core.multiarray._reconstruct])
+import functools
+torch.load = functools.partial(torch.load, weights_only=False)
+
 from transformers import (
     EarlyStoppingCallback,
     Seq2SeqTrainer,
