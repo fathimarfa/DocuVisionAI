@@ -106,7 +106,7 @@ def train(cfg: dict) -> None:
     )
 
     logger.info("Starting training...")
-    trainer.train()
+    trainer.train(resume_from_checkpoint=cfg.get("resume_from_checkpoint"))
 
     save_checkpoint(trainer, processor, f"{cfg['output_dir']}/checkpoint-final")
     logger.info("Training complete.")

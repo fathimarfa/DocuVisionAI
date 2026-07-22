@@ -1,4 +1,5 @@
 # TrOCR fine-tuning configuration
+resume_from_checkpoint: "/content/drive/MyDrive/DocuVisionAI/weights/checkpoint-2500"
 # Model
 model_name: "microsoft/trocr-base-handwritten"
 max_target_length: 128
@@ -26,7 +27,7 @@ fp16: true
 logging_steps: 100
 eval_steps: 500
 save_steps: 500
-save_total_limit: 3
+save_total_limit: 1
 load_best_model_at_end: true
 metric_for_best_model: "cer"
 greater_is_better: false
