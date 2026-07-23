@@ -99,16 +99,14 @@ def train(cfg: dict) -> None:
     compute_metrics = build_compute_metrics(processor)
 
     trainer = Seq2SeqTrainer(
-        model=model,
-        processing_class=processor,
-        args=training_args,
-        train_dataset=train_dataset,
-        eval_dataset=val_dataset,
-        data_collator=ocr_collate_fn,
-        compute_metrics=compute_metrics,
-        callbacks=[EarlyStoppingCallback(early_stopping_patience=cfg["early_stopping_patience"])],
+    model=model,
+    tokenizer=processor.feature_extractor,
+    args=training_args,
+    train_dataset=train_dataset,
+    eval_dataset=val_dataset,
+    data_collator=ocr_collate_fn,
+    compute_metrics=compute_metrics,
     )
-
     logger.info("Starting training...")
     trainer.train(resume_from_checkpoint=cfg.get("resume_from_checkpoint"))
 
