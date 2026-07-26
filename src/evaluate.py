@@ -141,14 +141,12 @@ def run_evaluation(checkpoint_path: str, base_model_name: str, test_csv: str, de
     base_model.config.decoder_start_token_id = processor.tokenizer.cls_token_id
     base_model.config.pad_token_id = processor.tokenizer.pad_token_id
     base_preds, base_refs = generate_predictions(base_model, processor, test_dataset, device)
-    base_metrics = {"cer": compute_cer(" ".join(base_refs), " ".join(base_preds)),
-                     "wer": compute_wer(" ".join(base_refs), " ".join(base_preds))}
+    base_metrics = {"cer": jiwer.cer(base_refs, base_preds), "wer": jiwer.wer(base_refs, base_preds)}
 
     logger.info("Evaluating fine-tuned model...")
     ft_model = VisionEncoderDecoderModel.from_pretrained(checkpoint_path)
     ft_preds, ft_refs = generate_predictions(ft_model, processor, test_dataset, device)
-    ft_metrics = {"cer": compute_cer(" ".join(ft_refs), " ".join(ft_preds)),
-                  "wer": compute_wer(" ".join(ft_refs), " ".join(ft_preds))}
+    ft_metrics = {"cer": jiwer.cer(ft_refs, ft_preds), "wer": jiwer.wer(ft_refs, ft_preds)}
 
     print_evaluation_report(base_metrics, ft_metrics, ft_refs, ft_preds, n_samples=5)
 
