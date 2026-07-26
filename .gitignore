@@ -1,8 +1,10 @@
 # Data & weights (too large for git)
 data/raw/
 data/processed/
-weights/checkpoint-*/*
-!weights/checkpoint-*/.gitkeep
+weights/checkpoint-best/*
+weights/checkpoint-final/*
+!weights/checkpoint-best/.gitkeep
+!weights/checkpoint-final/.gitkeep
 
 # Python
 __pycache__/
@@ -24,3 +26,6 @@ logs/
 
 # Env
 .env
+
+# Gradio
+flagged/

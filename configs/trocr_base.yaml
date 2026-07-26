@@ -1,5 +1,4 @@
 # TrOCR fine-tuning configuration
-resume_from_checkpoint: "/kaggle/working/checkpoint-4000"
 # Model
 model_name: "microsoft/trocr-base-handwritten"
 max_target_length: 128
@@ -9,11 +8,12 @@ dataset_name: "Teklia/IAM-line"
 train_split: 0.8
 val_split: 0.1
 test_split: 0.1
-subset_size: null       # start small for iteration; set to null for full dataset
+subset_size: null        # null = use full dataset; set a number (e.g. 500) for a quick smoke-test run
 seed: 42
 
 # Training
-output_dir: "/kaggle/working/weights"
+output_dir: "./weights"
+resume_from_checkpoint: null   # set to a checkpoint folder path to resume an interrupted run
 per_device_train_batch_size: 4
 per_device_eval_batch_size: 4
 gradient_accumulation_steps: 4   # effective batch size = 16
@@ -28,10 +28,10 @@ logging_steps: 100
 eval_steps: 500
 save_steps: 500
 save_total_limit: 1
-load_best_model_at_end: false
+load_best_model_at_end: false   # kept off intentionally — see README Reproducibility notes
 metric_for_best_model: "cer"
 greater_is_better: false
 predict_with_generate: true
 
-# Early stopping
+# Early stopping (not currently wired into train.py — see README)
 early_stopping_patience: 3

@@ -6,7 +6,7 @@ fine-tuned model against the base (zero-shot) model, and prints a formatted
 evaluation report matching the assignment's expected output format.
 
 Usage:
-    python src/evaluate.py --checkpoint weights/checkpoint-final --base-model microsoft/trocr-base-handwritten
+    python -m src.evaluate --checkpoint weights/checkpoint-final --base-model microsoft/trocr-base-handwritten
 """
 import argparse
 import logging
@@ -25,18 +25,14 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(me
 logger = logging.getLogger(__name__)
 
 
-def compute_cer(reference: str, hypothesis: str) -> float:
-    """Character Error Rate = (S + D + I) / len(reference), via jiwer."""
-    if len(reference) == 0:
-        return 0.0 if len(hypothesis) == 0 else 1.0
-    return jiwer.cer(reference, hypothesis)
+def compute_cer(references: List[str], hypotheses: List[str]) -> float:
+    """Corpus-level Character Error Rate, computed per-sentence then aggregated (via jiwer)."""
+    return jiwer.cer(references, hypotheses)
 
 
-def compute_wer(reference: str, hypothesis: str) -> float:
-    """Word Error Rate = (S + D + I) / word_count(reference), via jiwer."""
-    if len(reference.split()) == 0:
-        return 0.0 if len(hypothesis.split()) == 0 else 1.0
-    return jiwer.wer(reference, hypothesis)
+def compute_wer(references: List[str], hypotheses: List[str]) -> float:
+    """Corpus-level Word Error Rate, computed per-sentence then aggregated (via jiwer)."""
+    return jiwer.wer(references, hypotheses)
 
 
 def build_compute_metrics(processor: TrOCRProcessor) -> Callable:
@@ -119,7 +115,7 @@ def print_evaluation_report(base_metrics: Dict, ft_metrics: Dict, refs: List[str
     sample_idxs = random.sample(range(len(refs)), min(n_samples, len(refs)))
     for i, idx in enumerate(sample_idxs, 1):
         ref, pred = refs[idx], preds[idx]
-        cer = compute_cer(ref, pred)
+        cer = compute_cer([ref], [pred])
         match = "SUCCESS" if cer == 0 else "PARTIAL"
         print(f'[{i}] Target: "{ref}"')
         print(f'    Predicted: "{pred}"')
@@ -141,12 +137,12 @@ def run_evaluation(checkpoint_path: str, base_model_name: str, test_csv: str, de
     base_model.config.decoder_start_token_id = processor.tokenizer.cls_token_id
     base_model.config.pad_token_id = processor.tokenizer.pad_token_id
     base_preds, base_refs = generate_predictions(base_model, processor, test_dataset, device)
-    base_metrics = {"cer": jiwer.cer(base_refs, base_preds), "wer": jiwer.wer(base_refs, base_preds)}
+    base_metrics = {"cer": compute_cer(base_refs, base_preds), "wer": compute_wer(base_refs, base_preds)}
 
     logger.info("Evaluating fine-tuned model...")
     ft_model = VisionEncoderDecoderModel.from_pretrained(checkpoint_path)
     ft_preds, ft_refs = generate_predictions(ft_model, processor, test_dataset, device)
-    ft_metrics = {"cer": jiwer.cer(ft_refs, ft_preds), "wer": jiwer.wer(ft_refs, ft_preds)}
+    ft_metrics = {"cer": compute_cer(ft_refs, ft_preds), "wer": compute_wer(ft_refs, ft_preds)}
 
     print_evaluation_report(base_metrics, ft_metrics, ft_refs, ft_preds, n_samples=5)
 

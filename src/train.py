@@ -2,25 +2,21 @@
 train.py
 
 Fine-tunes TrOCR on a custom OCR dataset using the Hugging Face Seq2SeqTrainer,
-with mixed precision, gradient accumulation, LR scheduling, checkpointing and
-early stopping, as configured via a YAML file.
+with mixed precision, gradient accumulation, LR scheduling, and checkpointing,
+as configured via a YAML file. Supports resuming from a saved checkpoint.
 
 Usage:
-    python src/train.py --config configs/trocr_base.yaml
+    python -m src.train --config configs/trocr_base.yaml
 """
 import argparse
+import functools
 import logging
 import random
 
 import numpy as np
 import torch
 import yaml
-
-import functools
-torch.load = functools.partial(torch.load, weights_only=False)
-
 from transformers import (
-    EarlyStoppingCallback,
     Seq2SeqTrainer,
     Seq2SeqTrainingArguments,
     TrOCRProcessor,
@@ -33,6 +29,12 @@ from src.evaluate import build_compute_metrics
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger(__name__)
 
+# Newer PyTorch defaults to weights_only=True in torch.load, which breaks
+# resuming from checkpoints saved by older transformers/torch versions
+# (rng_state.pth contains numpy objects not on the safe-globals allowlist).
+# This is our own checkpoint, so restoring the permissive default is safe.
+torch.load = functools.partial(torch.load, weights_only=False)
+
 
 def set_seed(seed: int) -> None:
     random.seed(seed)
@@ -43,8 +45,7 @@ def set_seed(seed: int) -> None:
 
 def load_model(model_name: str) -> VisionEncoderDecoderModel:
     logger.info("Loading pre-trained model: %s", model_name)
-    model = VisionEncoderDecoderModel.from_pretrained(model_name)
-    return model
+    return VisionEncoderDecoderModel.from_pretrained(model_name)
 
 
 def configure_model_for_training(model: VisionEncoderDecoderModel, processor: TrOCRProcessor, cfg: dict):
@@ -99,14 +100,15 @@ def train(cfg: dict) -> None:
     compute_metrics = build_compute_metrics(processor)
 
     trainer = Seq2SeqTrainer(
-    model=model,
-    tokenizer=processor.feature_extractor,
-    args=training_args,
-    train_dataset=train_dataset,
-    eval_dataset=val_dataset,
-    data_collator=ocr_collate_fn,
-    compute_metrics=compute_metrics,
+        model=model,
+        processing_class=processor,
+        args=training_args,
+        train_dataset=train_dataset,
+        eval_dataset=val_dataset,
+        data_collator=ocr_collate_fn,
+        compute_metrics=compute_metrics,
     )
+
     logger.info("Starting training...")
     trainer.train(resume_from_checkpoint=cfg.get("resume_from_checkpoint"))
 
